@@ -83,7 +83,7 @@ const SignUpScreen = () => {
 					</Text>
 				</Text>
 
-				<SocialSignInButton />
+				{/* <SocialSignInButton /> */}
 
 				<CustomButton
 					text='Have an account? Sign In'
@@ -96,7 +96,7 @@ const SignUpScreen = () => {
 };
 
 const styles = StyleSheet.create({
-	root: { alignItems: 'center', padding: 20 },
+	root: { alignItems: 'center', padding: 50 },
 	logo: {
 		width: '75%',
 		maxWidth: 300,
@@ -106,11 +106,13 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		fontWeight: 'bold',
 		color: '#051C60',
-		margin: 50,
+		marginTop: 70,
+		marginBottom: 50,
+		marginHorizontal: 20,
 	},
 	text: {
 		color: 'gray',
-		marginVertical: 5,
+		marginVertical: 15,
 	},
 	link: { color: '#FDB075' },
 });

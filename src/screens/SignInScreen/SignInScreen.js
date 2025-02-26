@@ -74,7 +74,7 @@ const SignInScreen = () => {
 };
 
 const styles = StyleSheet.create({
-	root: { alignItems: 'center', padding: 20 },
+	root: { alignItems: 'center', padding: 50 },
 	logo: {
 		width: '75%',
 		maxWidth: 300,
