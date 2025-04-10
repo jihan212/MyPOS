@@ -9,13 +9,21 @@ import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen/ForgotPassw
 import NewPasswordScreen from './src/screens/NewPasswordScreen/NewPasswordScreen';
 import HomeScreen from './src/screens/HomeScreen/HomeScreen';
 import Navigation from './src/navigation';
+import FirstHomeScreen from './src/screens/FirstHomeScreen/FirstHomeScreen';
 
 const Stack = createStackNavigator();
 
 export default function App() {
 	return (
 		<NavigationContainer>
-			<Stack.Navigator screenOptions={{ headerShown: false }}>
+			<Stack.Navigator
+				initialRouteName='FirstHome'
+				screenOptions={{ headerShown: false }}
+			>
+				<Stack.Screen
+					name='FirstHome'
+					component={FirstHomeScreen}
+				/>
 				<Stack.Screen
 					name='SignIn'
 					component={SignInScreen}
