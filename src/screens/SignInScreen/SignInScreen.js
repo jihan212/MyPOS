@@ -22,7 +22,13 @@ const SignInScreen = () => {
 	const { height } = useWindowDimensions();
 	const navigation = useNavigation();
 
-	const { control, handleSubmit } = useForm();
+	const {
+		control,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+
+	console.log(errors);
 
 	const onSignInPressed = (data) => {
 		console.log(data);
@@ -51,11 +57,17 @@ const SignInScreen = () => {
 					placeholder='Username'
 					name='username'
 					control={control}
+					rules={{
+						required: true,
+					}}
 				/>
 				<CustomInput
 					placeholder='Password'
 					name='password'
 					control={control}
+					rules={{
+						required: true,
+					}}
 					secureTextEntry
 				/>
 
