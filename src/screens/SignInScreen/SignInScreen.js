@@ -16,9 +16,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useForm, Controller } from 'react-hook-form';
 
 const SignInScreen = () => {
-	// const [username, setUsername] = useState('');
-	// const [password, setPassword] = useState('');
-
 	const { height } = useWindowDimensions();
 	const navigation = useNavigation();
 
@@ -58,7 +55,7 @@ const SignInScreen = () => {
 					name='username'
 					control={control}
 					rules={{
-						required: true,
+						required: 'Username is required',
 					}}
 				/>
 				<CustomInput
@@ -66,7 +63,12 @@ const SignInScreen = () => {
 					name='password'
 					control={control}
 					rules={{
-						required: true,
+						required: 'Password is required',
+						minLength: {
+							value: 3,
+							message:
+								'Password should be minimum 3 characters long',
+						},
 					}}
 					secureTextEntry
 				/>

@@ -10,26 +10,44 @@ const CustomInput = ({
 	secureTextEntry,
 }) => {
 	return (
-		<View style={styles.container}>
-			<Controller
-				control={control}
-				name={name}
-				rules={rules}
-				render={({
-					field: { value, onChange, onBlur },
-					fieldState: { error },
-				}) => (
-					<TextInput
-						value={value}
-						onChangeText={onChange}
-						onBlur={onBlur}
-						placeholder={placeholder}
-						styles={styles.input}
-						secureTextEntry={secureTextEntry}
-					/>
-				)}
-			/>
-		</View>
+		<Controller
+			control={control}
+			name={name}
+			rules={rules}
+			render={({
+				field: { value, onChange, onBlur },
+				fieldState: { error },
+			}) => (
+				<>
+					<View
+						style={[
+							styles.container,
+							{ borderColor: error ? 'red' : '#e8e8e8' },
+						]}
+					>
+						<TextInput
+							value={value}
+							onChangeText={onChange}
+							onBlur={onBlur}
+							placeholder={placeholder}
+							styles={[styles.input, {}]}
+							secureTextEntry={secureTextEntry}
+						/>
+					</View>
+					{error && (
+						<Text
+							style={{
+								color: 'red',
+								alignSelf: 'stretch',
+								fontSize: 12,
+							}}
+						>
+							{error.message || 'Error'}
+						</Text>
+					)}
+				</>
+			)}
+		/>
 	);
 };
 
