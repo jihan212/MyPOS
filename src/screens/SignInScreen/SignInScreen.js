@@ -11,9 +11,8 @@ import React, { useState } from 'react';
 import Logo from '../../../assets/images/logo.png';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
-import SocialSignInButton from '../../components/SocialSignInButton/SocialSignInButton';
 import { useNavigation } from '@react-navigation/native';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 const SignInScreen = () => {
 	const { height } = useWindowDimensions();
