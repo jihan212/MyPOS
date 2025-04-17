@@ -1,36 +1,46 @@
 import {
 	View,
-	Text,
 	Image,
 	StyleSheet,
 	useWindowDimensions,
 	ScrollView,
-	TextInput,
+	Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import Logo from '../../../assets/images/logo.png';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../firebase';
 
 const SignInScreen = () => {
 	const { height } = useWindowDimensions();
 	const navigation = useNavigation();
 
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm();
+	const { control, handleSubmit } = useForm();
 
-	console.log(errors);
+	const onSignInPressed = async (data) => {
+		const { email, password } = data;
 
-	const onSignInPressed = (data) => {
-		console.log(data);
-		// Validate user
+		try {
+			const userCredential = await signInWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			const user = userCredential.user;
+			console.log('Signed in as:', user.email);
 
-		navigation.navigate('Home');
+			// Navigate to Home screen after successful login
+			setTimeout(() => {
+				navigation.navigate('Home');
+			}, 100); // 100ms delay
+		} catch (error) {
+			console.error('Login error:', error);
+			Alert.alert('Login Error', error.message);
+		}
 	};
 
 	const OnForgotPasswordPressed = () => {
@@ -50,11 +60,11 @@ const SignInScreen = () => {
 					resizeMode='contain'
 				/>
 				<CustomInput
-					placeholder='Username'
-					name='username'
+					placeholder='Email'
+					name='email'
 					control={control}
 					rules={{
-						required: 'Username is required',
+						required: 'Email is required',
 					}}
 				/>
 				<CustomInput
@@ -77,11 +87,11 @@ const SignInScreen = () => {
 					onPress={handleSubmit(onSignInPressed)}
 				/>
 				<CustomButton
-					text='Forget Password ?'
+					text='Forgot Password?'
 					onPress={OnForgotPasswordPressed}
 					type='TERTIARY'
 				/>
-				{/* <SocialSignInButton /> */}
+
 				<CustomButton
 					text='Don’t have an account? Sign Up'
 					onPress={OnSignUpPress}

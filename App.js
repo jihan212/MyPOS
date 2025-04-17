@@ -1,61 +1,92 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, ActivityIndicator, View } from 'react-native';
 import SignInScreen from './src/screens/SignInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import ConfirmEmailScreen from './src/screens/ConfirmEmailScreen/ConfirmEmailScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen/ForgotPasswordScreen';
 import NewPasswordScreen from './src/screens/NewPasswordScreen/NewPasswordScreen';
 import HomeScreen from './src/screens/HomeScreen/HomeScreen';
-import Navigation from './src/navigation';
 import FirstHomeScreen from './src/screens/FirstHomeScreen/FirstHomeScreen';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		// Listen to auth state changes
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			setUser(user);
+			setLoading(false);
+		});
+
+		// Clean up subscription on unmount
+		return () => unsubscribe();
+	}, []);
+
+	if (loading) {
+		return (
+			<View style={styles.loadingContainer}>
+				<ActivityIndicator
+					size='large'
+					color='#0000ff'
+				/>
+			</View>
+		);
+	}
+
 	return (
 		<NavigationContainer>
-			<Stack.Navigator
-				initialRouteName='FirstHome'
-				screenOptions={{ headerShown: false }}
-			>
-				<Stack.Screen
-					name='FirstHome'
-					component={FirstHomeScreen}
-				/>
-				<Stack.Screen
-					name='SignIn'
-					component={SignInScreen}
-				/>
-				<Stack.Screen
-					name='SignUp'
-					component={SignUpScreen}
-				/>
-				<Stack.Screen
-					name='ConfirmEmail'
-					component={ConfirmEmailScreen}
-				/>
-				<Stack.Screen
-					name='ForgotPassword'
-					component={ForgotPasswordScreen}
-				/>
-				<Stack.Screen
-					name='NewPassword'
-					component={NewPasswordScreen}
-				/>
-				<Stack.Screen
-					name='Home'
-					component={HomeScreen}
-				/>
+			<Stack.Navigator screenOptions={{ headerShown: false }}>
+				{user ? (
+					// If user is logged in, show Home only
+					<Stack.Screen
+						name='Home'
+						component={HomeScreen}
+					/>
+				) : (
+					// Otherwise, show auth flow
+					<>
+						<Stack.Screen
+							name='FirstHome'
+							component={FirstHomeScreen}
+						/>
+						<Stack.Screen
+							name='SignIn'
+							component={SignInScreen}
+						/>
+						<Stack.Screen
+							name='SignUp'
+							component={SignUpScreen}
+						/>
+						<Stack.Screen
+							name='ConfirmEmail'
+							component={ConfirmEmailScreen}
+						/>
+						<Stack.Screen
+							name='ForgotPassword'
+							component={ForgotPasswordScreen}
+						/>
+						<Stack.Screen
+							name='NewPassword'
+							component={NewPasswordScreen}
+						/>
+					</>
+				)}
 			</Stack.Navigator>
 		</NavigationContainer>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
+	loadingContainer: {
 		flex: 1,
-		backgroundColor: '#F9FBFC',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });

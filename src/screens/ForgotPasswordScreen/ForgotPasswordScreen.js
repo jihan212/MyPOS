@@ -1,45 +1,61 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import React from 'react';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../../firebase';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const ForgotPasswordScreen = () => {
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-		watch,
-	} = useForm();
-
+	const { control, handleSubmit } = useForm();
 	const navigation = useNavigation();
 
-	const onSendPressed = () => {
-		navigation.navigate('NewPassword');
+	const onSendPressed = async (data) => {
+		const email = data.email;
+
+		try {
+			await sendPasswordResetEmail(auth, email);
+			Alert.alert('Success', 'Password reset link sent to your email');
+			navigation.navigate('SignIn');
+		} catch (error) {
+			console.log(error);
+			Alert.alert('Error', error.message);
+		}
 	};
 
-	const OnSignInPress = () => {
+	const onSignInPress = () => {
 		navigation.navigate('SignIn');
 	};
 
 	return (
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View style={styles.root}>
-				<Text style={styles.title}>Reset Your Password </Text>
+				<Text style={styles.title}>Reset Your Password</Text>
+
 				<CustomInput
-					placeholder='Username'
-					name='username'
+					placeholder='Email'
+					name='email'
 					control={control}
+					rules={{
+						required: 'Email is required',
+						pattern: {
+							value: EMAIL_REGEX,
+							message: 'Email is invalid',
+						},
+					}}
 				/>
 
 				<CustomButton
-					text='Send'
+					text='Send Reset Link'
 					onPress={handleSubmit(onSendPressed)}
 				/>
+
 				<CustomButton
 					text='Back to Sign In'
-					onPress={OnSignInPress}
+					onPress={onSignInPress}
 					type='TERTIARY'
 				/>
 			</View>
@@ -49,11 +65,6 @@ const ForgotPasswordScreen = () => {
 
 const styles = StyleSheet.create({
 	root: { alignItems: 'center', padding: 50 },
-	logo: {
-		width: '75%',
-		maxWidth: 300,
-		height: 100,
-	},
 	title: {
 		fontSize: 24,
 		fontWeight: 'bold',

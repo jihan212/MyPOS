@@ -1,38 +1,45 @@
-import {
-	View,
-	Text,
-	Image,
-	StyleSheet,
-	useWindowDimensions,
-	ScrollView,
-} from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import React from 'react';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../../../firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
 
 const SignUpScreen = () => {
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-		watch,
-	} = useForm();
-
-	const pwd = watch('password'); // Watch password field
-	// console.log(errors);
+	const { control, handleSubmit, watch } = useForm();
+	const pwd = watch('password');
 
 	const navigation = useNavigation();
 
-	const onRegisterPressed = (data) => {
-		console.log(data);
+	const onRegisterPressed = async (data) => {
+		const { email, password, username } = data;
 
-		// Validate user
+		try {
+			const userCredential = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			);
+			const user = userCredential.user;
 
-		navigation.navigate('SignIn');
+			// 🔥 Save extra user data (username) to Firestore
+			await setDoc(doc(db, 'users', user.uid), {
+				username,
+				email,
+				createdAt: new Date(),
+			});
+
+			Alert.alert('Success', 'Account created!');
+			navigation.navigate('SignIn');
+		} catch (error) {
+			console.error('Signup error:', error);
+			Alert.alert('Registration Error', error.message);
+		}
 	};
 
 	const OnSignInPress = () => {
@@ -51,6 +58,7 @@ const SignUpScreen = () => {
 		<ScrollView showsVerticalScrollIndicator={false}>
 			<View style={styles.root}>
 				<Text style={styles.title}>Create an account</Text>
+
 				<CustomInput
 					placeholder='Username'
 					name='username'
@@ -69,6 +77,7 @@ const SignUpScreen = () => {
 						},
 					}}
 				/>
+
 				<CustomInput
 					placeholder='Email'
 					name='email'
@@ -81,6 +90,7 @@ const SignUpScreen = () => {
 						},
 					}}
 				/>
+
 				<CustomInput
 					placeholder='Password'
 					name='password'
@@ -95,6 +105,7 @@ const SignUpScreen = () => {
 					}}
 					secureTextEntry
 				/>
+
 				<CustomInput
 					placeholder='Repeat Password'
 					name='password-repeat'
@@ -106,10 +117,12 @@ const SignUpScreen = () => {
 					}}
 					secureTextEntry
 				/>
+
 				<CustomButton
 					text='Register'
 					onPress={handleSubmit(onRegisterPressed)}
 				/>
+
 				<Text style={styles.text}>
 					By Registration, you confirm that you accept our{' '}
 					<Text
@@ -126,8 +139,6 @@ const SignUpScreen = () => {
 						Privacy Policy
 					</Text>
 				</Text>
-
-				{/* <SocialSignInButton /> */}
 
 				<CustomButton
 					text='Have an account? Sign In'
