@@ -22,7 +22,7 @@ const FirstHomeScreen = () => {
 	const members = [
 		{ id: '20235203035', name: 'Jihan Jashim' },
 		{ id: '20235203041', name: 'Monisa Biswas' },
-		{ id: '20235203050', name: 'Sabbiruzzaman Noman' },
+		{ id: '20235203044', name: 'MD. Sabbiruzzaman Noman' },
 	];
 
 	return (
@@ -36,10 +36,22 @@ const FirstHomeScreen = () => {
 
 			<View style={styles.table}>
 				<View style={styles.tableRow}>
-					<Text style={[styles.tableCell, styles.headerCell]}>
+					<Text
+						style={[
+							styles.tableCell,
+							styles.headerCell,
+							styles.idCell,
+						]}
+					>
 						ID
 					</Text>
-					<Text style={[styles.tableCell, styles.headerCell]}>
+					<Text
+						style={[
+							styles.tableCell,
+							styles.headerCell,
+							styles.nameCell,
+						]}
+					>
 						Name
 					</Text>
 				</View>
@@ -49,8 +61,12 @@ const FirstHomeScreen = () => {
 						key={index}
 						style={styles.tableRow}
 					>
-						<Text style={styles.tableCell}>{member.id}</Text>
-						<Text style={styles.tableCell}>{member.name}</Text>
+						<Text style={[styles.tableCell, styles.idCell]}>
+							{member.id}
+						</Text>
+						<Text style={[styles.tableCell, styles.idCell]}>
+							{member.name}
+						</Text>
 					</View>
 				))}
 			</View>
@@ -89,12 +105,12 @@ const styles = StyleSheet.create({
 	},
 	tableRow: {
 		flexDirection: 'row',
+		alignContent: 'flex-start',
 		borderBottomWidth: 0.5,
 		borderColor: '#ccc',
 	},
 	headerCell: {
 		fontWeight: 'bold',
-
 		backgroundColor: '#f5f5f5',
 	},
 	tableCell: {

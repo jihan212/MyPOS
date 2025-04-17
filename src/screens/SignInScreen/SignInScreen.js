@@ -5,8 +5,11 @@ import {
 	useWindowDimensions,
 	ScrollView,
 	Alert,
+	Text,
+	TouchableOpacity,
+	ActivityIndicator,
 } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
 import Logo from '../../../assets/images/logo.png';
 import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
@@ -19,10 +22,24 @@ const SignInScreen = () => {
 	const { height } = useWindowDimensions();
 	const navigation = useNavigation();
 
-	const { control, handleSubmit } = useForm();
+	const { control, handleSubmit, setValue } = useForm();
+
+	const demoCredentials = {
+		email: 'user1@mail.com',
+		password: 'user123'
+	};
+
+	const onDemoLoginPress = () => {
+		setValue('email', demoCredentials.email);
+		setValue('password', demoCredentials.password);
+		handleSubmit(onSignInPressed)();
+	};
+
+	const [isLoading, setIsLoading] = useState(false);
 
 	const onSignInPressed = async (data) => {
 		const { email, password } = data;
+		setIsLoading(true);
 
 		try {
 			const userCredential = await signInWithEmailAndPassword(
@@ -33,13 +50,14 @@ const SignInScreen = () => {
 			const user = userCredential.user;
 			console.log('Signed in as:', user.email);
 
-			// Navigate to Home screen after successful login
 			setTimeout(() => {
 				navigation.navigate('Home');
-			}, 100); // 100ms delay
+			}, 100);
 		} catch (error) {
 			console.error('Login error:', error);
 			Alert.alert('Login Error', error.message);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -83,9 +101,32 @@ const SignInScreen = () => {
 				/>
 
 				<CustomButton
-					text='Sign In'
+					text={isLoading ? 'Loading' : 'Sign In'}
 					onPress={handleSubmit(onSignInPressed)}
-				/>
+					disabled={isLoading}
+
+				>
+					{isLoading && (
+						<ActivityIndicator 
+							color="white" 
+							size="small"
+							style={{ marginLeft: 10 }}
+						/>
+					)}
+				</CustomButton>
+
+				{/* Demo Login Section */}
+				<View style={styles.demoContainer}>
+					<Text style={styles.demoTitle}>Demo Login</Text>
+					<TouchableOpacity 
+						style={styles.demoCredentials}
+						onPress={onDemoLoginPress}
+					>
+						<Text style={styles.demoText}>Email: {demoCredentials.email}</Text>
+						<Text style={styles.demoText}>Password: {demoCredentials.password}</Text>
+					</TouchableOpacity>
+				</View>
+
 				<CustomButton
 					text='Forgot Password?'
 					onPress={OnForgotPasswordPressed}
@@ -108,6 +149,35 @@ const styles = StyleSheet.create({
 		width: '75%',
 		maxWidth: 300,
 		height: 100,
+	},
+	demoContainer: {
+		marginVertical: 20,
+		padding: 15,
+		backgroundColor: '#f5f5f5',
+		borderRadius: 10,
+		width: '100%',
+		alignItems: 'center',
+	},
+	demoTitle: {
+		fontSize: 16,
+		fontWeight: 'bold',
+		marginBottom: 10,
+		color: '#333',
+	},
+	demoCredentials: {
+		padding: 10,
+		backgroundColor: '#fff',
+		borderRadius: 5,
+		width: '100%',
+		alignItems: 'center',
+	},
+	demoText: {
+		fontSize: 14,
+		color: '#666',
+		marginVertical: 2,
+	},
+	loader: {
+		position: 'absolute',
 	},
 });
 
