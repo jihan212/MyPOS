@@ -18,6 +18,16 @@ import AboutScreen from './src/screens/AboutScreen/AboutScreen';
 import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
 import { theme } from './src/constants/theme';
 import { useNavigation } from '@react-navigation/native';  // Add this import at the top
+import ProductsScreen from './src/screens/ProductsScreen/ProductsScreen';
+import CustomersScreen from './src/screens/CustomersScreen/CustomersScreen';
+import SalesScreen from './src/screens/SalesScreen/SalesScreen';
+import InvoicesScreen from './src/screens/InvoicesScreen/InvoicesScreen';
+import ReportsScreen from './src/screens/ReportsScreen/ReportsScreen';
+import SettingsScreen from './src/screens/SettingsScreen/SettingsScreen';
+import { signOut } from 'firebase/auth';  // Add this import at the top
+
+// Add import for LogoutScreen
+import LogoutScreen from './src/screens/LogoutScreen/LogoutScreen';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -62,11 +72,65 @@ function HomeDrawerNavigator() {
         }}
       />
       <Drawer.Screen 
+        name="Sales" 
+        component={SalesScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="cart-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen 
+        name="Products" 
+        component={ProductsScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="cube-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen 
+        name="Customers" 
+        component={CustomersScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="people-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen 
+        name="Invoices" 
+        component={InvoicesScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="receipt-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen 
+        name="Reports" 
+        component={ReportsScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="bar-chart-outline" size={24} color={color} />
+          ),
+        }}
+      />
+       <Drawer.Screen 
         name="Profile" 
         component={ProfileScreen}
         options={{
           drawerIcon: ({color}) => (
             <Ionicons name="person-outline" size={24} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen 
+        name="Settings" 
+        component={SettingsScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="settings-outline" size={24} color={color} />
           ),
         }}
       />
@@ -78,6 +142,28 @@ function HomeDrawerNavigator() {
             <Ionicons name="information-circle-outline" size={24} color={color} />
           ),
         }}
+      />
+      
+      <Drawer.Screen 
+        name="Logout"
+        component={LogoutScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="log-out-outline" size={24} color={color} />
+          ),
+        }}
+        listeners={({navigation}) => ({
+          drawerItemPress: () => {
+            signOut(auth).then(() => {
+              navigation.getParent().reset({
+                index: 0,
+                routes: [{ name: 'FirstHome' }],
+              });
+            }).catch((error) => {
+              console.error('Logout error:', error);
+            });
+          },
+        })}
       />
     </Drawer.Navigator>
   );
