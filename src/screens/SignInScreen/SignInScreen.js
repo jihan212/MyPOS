@@ -25,8 +25,8 @@ const SignInScreen = () => {
 	const { control, handleSubmit, setValue } = useForm();
 
 	const demoCredentials = {
-		email: 'user1@mail.com',
-		password: 'user123'
+		email: 'demo@mail.com',
+		password: 'demo1234'
 	};
 
 	const onDemoLoginPress = () => {
@@ -50,9 +50,8 @@ const SignInScreen = () => {
 			const user = userCredential.user;
 			console.log('Signed in as:', user.email);
 
-			setTimeout(() => {
-				navigation.navigate('Home');
-			}, 100);
+			// Remove navigation code as it will be handled automatically by App.js
+			// The auth state change will trigger the navigation
 		} catch (error) {
 			console.error('Login error:', error);
 			Alert.alert('Login Error', error.message);
