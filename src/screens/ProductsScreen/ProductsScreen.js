@@ -43,6 +43,9 @@ const ProductsScreen = () => {
 
   const renderProduct = ({ item }) => (
     <Card style={styles.card}>
+      {item.imageUrl && (
+        <Card.Cover source={{ uri: item.imageUrl }} style={styles.productImage} />
+      )}
       <Card.Content>
         <Title>{item.name}</Title>
         <Paragraph>Price: ${item.price}</Paragraph>
@@ -103,6 +106,10 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: theme.colors.primary,
+  },
+  productImage: {
+    height: 200,
+    resizeMode: 'cover'
   },
 });
 

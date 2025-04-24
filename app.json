@@ -30,6 +30,14 @@
         "projectId": "e215920f-b6c1-4116-b086-0d34f9cc271e"
       }
     },
-    "owner": "20235203035"
+    "owner": "20235203035",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your customers."
+        }
+      ]
+    ]
   }
 }
