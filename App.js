@@ -29,6 +29,7 @@ import { signOut } from 'firebase/auth';  // Add this import at the top
 // Add import for LogoutScreen
 import LogoutScreen from './src/screens/LogoutScreen/LogoutScreen';
 import AddEditProduct from './src/screens/ProductsScreen/AddEditProduct';
+import AddEditCustomer from './src/screens/CustomersScreen/AddEditCustomer';  // Add this line
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -176,6 +177,8 @@ function HomeStackNavigator() {
             <Stack.Screen name="HomeDrawer" component={HomeDrawerNavigator} />
             <Stack.Screen name="AddProduct" component={AddEditProduct} />
             <Stack.Screen name="EditProduct" component={AddEditProduct} />
+            <Stack.Screen name="AddCustomer" component={AddEditCustomer} />
+            <Stack.Screen name="EditCustomer" component={AddEditCustomer} />
         </Stack.Navigator>
     );
 }

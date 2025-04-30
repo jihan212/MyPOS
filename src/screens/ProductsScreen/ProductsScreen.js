@@ -7,11 +7,45 @@ import { theme } from '../../constants/theme';
 import { useNavigation } from '@react-navigation/native';
 
 const ProductsScreen = () => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([
+    {
+      id: '1',
+      name: 'iPhone 14 Pro',
+      price: 999.99,
+      stock: 50,
+      category: 'Electronics',
+      imageUrl: 'https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=800&auto=format&fit=crop'
+    },
+    {
+      id: '2',
+      name: 'MacBook Air M2',
+      price: 1299.99,
+      stock: 30,
+      category: 'Computers',
+      imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop'
+    },
+    {
+      id: '3',
+      name: 'AirPods Pro',
+      price: 249.99,
+      stock: 100,
+      category: 'Accessories',
+      imageUrl: 'https://images.unsplash.com/photo-1588156979435-379b9d802921?w=800&auto=format&fit=crop'
+    },
+    {
+      id: '4',
+      name: 'iPad Pro 12.9"',
+      price: 1099.99,
+      stock: 25,
+      category: 'Tablets',
+      imageUrl: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop'
+    }
+  ]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-
+  // Remove or comment out the useEffect and fetchProducts function since we're using demo data
+  /*
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -31,6 +65,7 @@ const ProductsScreen = () => {
       setLoading(false);
     }
   };
+  */
 
   const handleDelete = async (productId) => {
     try {
