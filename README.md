@@ -27,6 +27,7 @@ git clone https://github.com/yourusername/MyPOS.git
 2. Navigate to the project directory:
 ```bash
 cd MyPOS
+```
 
 3. Install dependencies:
 ```bash
