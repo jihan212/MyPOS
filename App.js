@@ -31,187 +31,262 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function HomeDrawerNavigator() {
-  return (
-    <Drawer.Navigator 
-      initialRouteName="Dashboard"
-      screenOptions={({navigation}) => ({
-        headerShown: true,
-        headerStyle: {
-          backgroundColor: theme.colors.surface,
-          elevation: 0,
-          shadowOpacity: 0,
-        },
-        headerTintColor: theme.colors.text,
-        headerRight: () => (
-          <Ionicons 
-            name="person-circle-outline" 
-            size={32} 
-            color={theme.colors.primary}
-            style={{ marginRight: 15 }}
-            onPress={() => navigation.navigate('Profile')}
-          />
-        ),
-        drawerStyle: {
-          backgroundColor: theme.colors.surface,
-          width: 280,
-        },
-        drawerActiveTintColor: theme.colors.primary,
-        drawerInactiveTintColor: theme.colors.textLight
-      })}
-    >
-      <Drawer.Screen 
-        name="Dashboard" 
-        component={HomeContent}
-        options={{
-          title: 'Dashboard',
-          drawerIcon: ({color}) => (
-            <Ionicons name="home-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen 
-        name="Sales" 
-        component={SalesScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="cart-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen 
-        name="Products" 
-        component={ProductsScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="cube-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen 
-        name="Customers" 
-        component={CustomersScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="people-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen 
-        name="Invoices" 
-        component={InvoicesScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="receipt-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen 
-        name="Reports" 
-        component={ReportsScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="bar-chart-outline" size={24} color={color} />
-          ),
-        }}
-      />
-       <Drawer.Screen 
-        name="Profile" 
-        component={ProfileScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="person-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen 
-        name="Settings" 
-        component={SettingsScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="settings-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen 
-        name="About" 
-        component={AboutScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="information-circle-outline" size={24} color={color} />
-          ),
-        }}
-      />
-      
-      <Drawer.Screen 
-        name="Logout"
-        component={LogoutScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="log-out-outline" size={24} color={color} />
-          ),
-        }}
-        listeners={({navigation}) => ({
-          drawerItemPress: () => {
-            signOut(auth).then(() => {
-              navigation.getParent().reset({
-                index: 0,
-                routes: [{ name: 'FirstHome' }],
-              });
-            }).catch((error) => {
-              console.error('Logout error:', error);
-            });
-          },
-        })}
-      />
-    </Drawer.Navigator>
-  );
+	return (
+		<Drawer.Navigator
+			initialRouteName='Dashboard'
+			screenOptions={({ navigation }) => ({
+				headerShown: true,
+				headerStyle: {
+					backgroundColor: theme.colors.surface,
+					elevation: 0,
+					shadowOpacity: 0,
+				},
+				headerTintColor: theme.colors.text,
+				headerRight: () => (
+					<Ionicons
+						name='person-circle-outline'
+						size={32}
+						color={theme.colors.primary}
+						style={{ marginRight: 15 }}
+						onPress={() => navigation.navigate('Profile')}
+					/>
+				),
+				drawerStyle: {
+					backgroundColor: theme.colors.surface,
+					width: 280,
+				},
+				drawerActiveTintColor: theme.colors.primary,
+				drawerInactiveTintColor: theme.colors.textLight,
+			})}
+		>
+			<Drawer.Screen
+				name='Dashboard'
+				component={HomeContent}
+				options={{
+					title: 'Dashboard',
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='home-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Sales'
+				component={SalesScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='cart-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Products'
+				component={ProductsScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='cube-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Customers'
+				component={CustomersScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='people-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Invoices'
+				component={InvoicesScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='receipt-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Reports'
+				component={ReportsScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='bar-chart-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Profile'
+				component={ProfileScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='person-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Settings'
+				component={SettingsScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='settings-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='About'
+				component={AboutScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='information-circle-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+
+			<Drawer.Screen
+				name='Logout'
+				component={LogoutScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='log-out-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+				listeners={({ navigation }) => ({
+					drawerItemPress: () => {
+						signOut(auth)
+							.then(() => {
+								navigation.getParent().reset({
+									index: 0,
+									routes: [{ name: 'FirstHome' }],
+								});
+							})
+							.catch((error) => {
+								console.error('Logout error:', error);
+							});
+					},
+				})}
+			/>
+		</Drawer.Navigator>
+	);
 }
 
 function HomeStackNavigator() {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="HomeDrawer" component={HomeDrawerNavigator} />
-            <Stack.Screen name="AddProduct" component={AddEditProduct} />
-            <Stack.Screen name="EditProduct" component={AddEditProduct} />
-            <Stack.Screen name="AddCustomer" component={AddEditCustomer} />
-            <Stack.Screen name="EditCustomer" component={AddEditCustomer} />
-        </Stack.Navigator>
-    );
+	return (
+		<Stack.Navigator screenOptions={{ headerShown: false }}>
+			<Stack.Screen
+				name='HomeDrawer'
+				component={HomeDrawerNavigator}
+			/>
+			<Stack.Screen
+				name='AddProduct'
+				component={AddEditProduct}
+			/>
+			<Stack.Screen
+				name='EditProduct'
+				component={AddEditProduct}
+			/>
+			<Stack.Screen
+				name='AddCustomer'
+				component={AddEditCustomer}
+			/>
+			<Stack.Screen
+				name='EditCustomer'
+				component={AddEditCustomer}
+			/>
+		</Stack.Navigator>
+	);
 }
 
 function AuthStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="FirstHome" component={FirstHomeScreen} />
-      <Stack.Screen name="SignIn" component={SignInScreen} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-      <Stack.Screen name="NewPassword" component={NewPasswordScreen} />
-    </Stack.Navigator>
-  );
+	return (
+		<Stack.Navigator screenOptions={{ headerShown: false }}>
+			<Stack.Screen
+				name='FirstHome'
+				component={FirstHomeScreen}
+			/>
+			<Stack.Screen
+				name='SignIn'
+				component={SignInScreen}
+			/>
+			<Stack.Screen
+				name='SignUp'
+				component={SignUpScreen}
+			/>
+			<Stack.Screen
+				name='ConfirmEmail'
+				component={ConfirmEmailScreen}
+			/>
+			<Stack.Screen
+				name='ForgotPassword'
+				component={ForgotPasswordScreen}
+			/>
+			<Stack.Screen
+				name='NewPassword'
+				component={NewPasswordScreen}
+			/>
+		</Stack.Navigator>
+	);
 }
 
 export default function App() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+			setUser(user);
+			setLoading(false);
+		});
 
-    return unsubscribe;
-  }, []);
+		return unsubscribe;
+	}, []);
 
-  if (loading) {
-    return null; // Or a loading spinner
-  }
+	if (loading) {
+		return null; // Or a loading spinner
+	}
 
-  return (
-    <NavigationContainer>
-      {user ? <HomeStackNavigator /> : <AuthStack />}
-    </NavigationContainer>
-  );
+	return (
+		<NavigationContainer>
+			{user ? <HomeStackNavigator /> : <AuthStack />}
+		</NavigationContainer>
+	);
 }

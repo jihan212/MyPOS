@@ -35,7 +35,7 @@ npm install
 ```
 4. Start Metro Bundler:
 ```bash
-npx react-native start
+npx expo start
 ```
 
 ## 🛠️ Tech Stack

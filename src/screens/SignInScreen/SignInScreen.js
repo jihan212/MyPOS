@@ -26,7 +26,7 @@ const SignInScreen = () => {
 
 	const demoCredentials = {
 		email: 'demo@mail.com',
-		password: 'demo1234'
+		password: 'demo1234',
 	};
 
 	const onDemoLoginPress = () => {
@@ -103,12 +103,11 @@ const SignInScreen = () => {
 					text={isLoading ? 'Loading' : 'Sign In'}
 					onPress={handleSubmit(onSignInPressed)}
 					disabled={isLoading}
-
 				>
 					{isLoading && (
-						<ActivityIndicator 
-							color="white" 
-							size="small"
+						<ActivityIndicator
+							color='white'
+							size='small'
 							style={{ marginLeft: 10 }}
 						/>
 					)}
@@ -117,12 +116,16 @@ const SignInScreen = () => {
 				{/* Demo Login Section */}
 				<View style={styles.demoContainer}>
 					<Text style={styles.demoTitle}>Demo Login</Text>
-					<TouchableOpacity 
+					<TouchableOpacity
 						style={styles.demoCredentials}
 						onPress={onDemoLoginPress}
 					>
-						<Text style={styles.demoText}>Email: {demoCredentials.email}</Text>
-						<Text style={styles.demoText}>Password: {demoCredentials.password}</Text>
+						<Text style={styles.demoText}>
+							Email: {demoCredentials.email}
+						</Text>
+						<Text style={styles.demoText}>
+							Password: {demoCredentials.password}
+						</Text>
 					</TouchableOpacity>
 				</View>
 
