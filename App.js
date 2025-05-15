@@ -25,6 +25,7 @@ import ConfirmEmailScreen from './src/screens/ConfirmEmailScreen/ConfirmEmailScr
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen/ForgotPasswordScreen';
 import NewPasswordScreen from './src/screens/NewPasswordScreen/NewPasswordScreen';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { initializeData } from './src/utils/dataStorage';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -128,7 +129,7 @@ function HomeDrawerNavigator() {
 					),
 				}}
 			/>
-			<Drawer.Screen
+			{/* <Drawer.Screen
 				name='Settings'
 				component={SettingsScreen}
 				options={{
@@ -140,7 +141,7 @@ function HomeDrawerNavigator() {
 						/>
 					),
 				}}
-			/>
+			/> */}
 			<Drawer.Screen
 				name='About'
 				component={AboutScreen}
@@ -246,6 +247,7 @@ function AuthStack() {
 export default function App() {
 	const [user, setUser] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [dataInitialized, setDataInitialized] = useState(false);
 
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -253,10 +255,18 @@ export default function App() {
 			setLoading(false);
 		});
 
+		// Initialize data
+		initializeData().then((success) => {
+			setDataInitialized(true);
+			if (!success) {
+				console.warn('Failed to initialize data');
+			}
+		});
+
 		return unsubscribe;
 	}, []);
 
-	if (loading) {
+	if (loading || !dataInitialized) {
 		return null; // Or a loading spinner
 	}
 
