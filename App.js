@@ -14,6 +14,7 @@ import SalesScreen from './src/screens/SalesScreen/SalesScreen';
 import InvoicesScreen from './src/screens/InvoicesScreen/InvoicesScreen';
 import ReportsScreen from './src/screens/ReportsScreen/ReportsScreen';
 import SettingsScreen from './src/screens/SettingsScreen/SettingsScreen';
+import CategoriesScreen from './src/screens/CategoriesScreen/CategoriesScreen';
 import AddEditProduct from './src/screens/ProductsScreen/AddEditProduct';
 import AddEditCustomer from './src/screens/CustomersScreen/AddEditCustomer';
 import { signOut } from 'firebase/auth';
@@ -84,6 +85,19 @@ function HomeDrawerNavigator() {
 					drawerIcon: ({ color }) => (
 						<Ionicons
 							name='cube-outline'
+							size={24}
+							color={color}
+						/>
+					),
+				}}
+			/>
+			<Drawer.Screen
+				name='Categories'
+				component={CategoriesScreen}
+				options={{
+					drawerIcon: ({ color }) => (
+						<Ionicons
+							name='pricetag-outline'
 							size={24}
 							color={color}
 						/>
@@ -208,6 +222,10 @@ function HomeStackNavigator() {
 			<Stack.Screen
 				name='EditCustomer'
 				component={AddEditCustomer}
+			/>
+			<Stack.Screen
+				name='Categories'
+				component={CategoriesScreen}
 			/>
 		</Stack.Navigator>
 	);

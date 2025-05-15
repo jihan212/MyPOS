@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import { List, Switch, Divider, Button, TextInput, Card, Title } from 'react-native-paper';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import { List, Switch, Divider, Button, TextInput, Card, Title, Text } from 'react-native-paper';
 import { theme } from '../../constants/theme';
+import { resetData } from '../../utils/dataStorage';
 
 const SettingsScreen = () => {
   const [notifications, setNotifications] = useState(true);
@@ -13,6 +14,28 @@ const SettingsScreen = () => {
 
   const handleSave = () => {
     // Implement settings save functionality
+  };
+
+  const handleResetData = async () => {
+    Alert.alert(
+      'Reset Data', 
+      'Are you sure you want to reset all data to initial values? This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Reset', 
+          style: 'destructive',
+          onPress: async () => {
+            const success = await resetData();
+            if (success) {
+              Alert.alert('Success', 'Data has been reset to initial values. Please restart the app.');
+            } else {
+              Alert.alert('Error', 'Failed to reset data.');
+            }
+          }
+        }
+      ]
+    );
   };
 
   return (
@@ -113,6 +136,24 @@ const SettingsScreen = () => {
         </Card.Content>
       </Card>
 
+      <Card style={styles.section}>
+        <Card.Content>
+          <Title>Data Management</Title>
+          <Divider style={styles.divider} />
+          <Button 
+            mode="contained" 
+            style={styles.button}
+            onPress={handleResetData}
+            color={theme.colors.error}
+          >
+            Reset All Data
+          </Button>
+          <Text style={styles.warningText}>
+            Warning: This will reset all products, categories, customers, and sales data to their initial values.
+          </Text>
+        </Card.Content>
+      </Card>
+
       <Button
         mode="contained"
         onPress={handleSave}
@@ -143,6 +184,15 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     backgroundColor: theme.colors.primary,
   },
+  divider: {
+    marginVertical: 12,
+  },
+  warningText: {
+    color: theme.colors.error,
+    fontSize: 12,
+    marginTop: 4,
+    fontStyle: 'italic',
+  }
 });
 
 export default SettingsScreen;
