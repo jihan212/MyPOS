@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet } from 'react-native';
 import {
 	FAB,
@@ -8,45 +8,47 @@ import {
 	Paragraph,
 	Button,
 } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { theme } from '../../constants/theme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+
+const CUSTOMERS_STORAGE_KEY = '@mypos_customers';
 
 const CustomersScreen = () => {
 	const navigation = useNavigation();
 	const [searchQuery, setSearchQuery] = useState('');
+	const [customers, setCustomers] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const isFocused = useIsFocused();
 
-	// Demo customer data
-	const [customers, setCustomers] = useState([
-		{
-			id: '1',
-			name: 'John Doe',
-			email: 'john@example.com',
-			phone: '+1234567890',
-			address: '123 Main St, City',
-			totalOrders: 5,
-		},
-		{
-			id: '2',
-			name: 'Jane Smith',
-			email: 'jane@example.com',
-			phone: '+1987654321',
-			address: '456 Oak Ave, Town',
-			totalOrders: 3,
-		},
-		{
-			id: '3',
-			name: 'Mike Johnson',
-			email: 'mike@example.com',
-			phone: '+1122334455',
-			address: '789 Pine Rd, Village',
-			totalOrders: 8,
-		},
-	]);
+	useEffect(() => {
+		if (isFocused) {
+			loadCustomers();
+		}
+	}, [isFocused]);
 
-	const handleDelete = (customerId) => {
-		setCustomers(
-			customers.filter((customer) => customer.id !== customerId)
-		);
+	const loadCustomers = async () => {
+		try {
+			setLoading(true);
+			const storedCustomers = await AsyncStorage.getItem(CUSTOMERS_STORAGE_KEY);
+			if (storedCustomers) {
+				setCustomers(JSON.parse(storedCustomers));
+			}
+		} catch (error) {
+			console.error('Error loading customers:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const handleDelete = async (customerId) => {
+		try {
+			const updatedCustomers = customers.filter((customer) => customer.id !== customerId);
+			await AsyncStorage.setItem(CUSTOMERS_STORAGE_KEY, JSON.stringify(updatedCustomers));
+			setCustomers(updatedCustomers);
+		} catch (error) {
+			console.error('Error deleting customer:', error);
+		}
 	};
 
 	const renderCustomer = ({ item }) => (

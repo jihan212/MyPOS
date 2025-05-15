@@ -3,12 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { onAuthStateChanged } from 'firebase/auth';
-// Remove this duplicate import
 import { auth } from './firebase';
 import HomeContent from './src/screens/HomeScreen/HomeScreen';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AboutScreen from './src/screens/AboutScreen/AboutScreen';
-import ProfileScreen from './src/screens/ProfileScreen/ProfileScreen';
 import { theme } from './src/constants/theme';
 import ProductsScreen from './src/screens/ProductsScreen/ProductsScreen';
 import CustomersScreen from './src/screens/CustomersScreen/CustomersScreen';
@@ -26,6 +24,7 @@ import SignUpScreen from './src/screens/SignUpScreen/SignUpScreen';
 import ConfirmEmailScreen from './src/screens/ConfirmEmailScreen/ConfirmEmailScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen/ForgotPasswordScreen';
 import NewPasswordScreen from './src/screens/NewPasswordScreen/NewPasswordScreen';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -42,15 +41,6 @@ function HomeDrawerNavigator() {
 					shadowOpacity: 0,
 				},
 				headerTintColor: theme.colors.text,
-				headerRight: () => (
-					<Ionicons
-						name='person-circle-outline'
-						size={32}
-						color={theme.colors.primary}
-						style={{ marginRight: 15 }}
-						onPress={() => navigation.navigate('Profile')}
-					/>
-				),
 				drawerStyle: {
 					backgroundColor: theme.colors.surface,
 					width: 280,
@@ -139,19 +129,6 @@ function HomeDrawerNavigator() {
 				}}
 			/>
 			<Drawer.Screen
-				name='Profile'
-				component={ProfileScreen}
-				options={{
-					drawerIcon: ({ color }) => (
-						<Ionicons
-							name='person-outline'
-							size={24}
-							color={color}
-						/>
-					),
-				}}
-			/>
-			<Drawer.Screen
 				name='Settings'
 				component={SettingsScreen}
 				options={{
@@ -177,7 +154,6 @@ function HomeDrawerNavigator() {
 					),
 				}}
 			/>
-
 			<Drawer.Screen
 				name='Logout'
 				component={LogoutScreen}
@@ -285,8 +261,10 @@ export default function App() {
 	}
 
 	return (
-		<NavigationContainer>
-			{user ? <HomeStackNavigator /> : <AuthStack />}
-		</NavigationContainer>
+		<PaperProvider theme={theme}>
+			<NavigationContainer>
+				{user ? <HomeStackNavigator /> : <AuthStack />}
+			</NavigationContainer>
+		</PaperProvider>
 	);
 }

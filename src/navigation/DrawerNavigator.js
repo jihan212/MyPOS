@@ -3,7 +3,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { theme } from '../constants/theme';
 import { screenOptions } from './screenOptions';
 import HomeContent from '../screens/HomeScreen/HomeScreen';
-import ProfileScreen from '../screens/ProfileScreen/ProfileScreen';
 import AboutScreen from '../screens/AboutScreen/AboutScreen';
 
 const Drawer = createDrawerNavigator();

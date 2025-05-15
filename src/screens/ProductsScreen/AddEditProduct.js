@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { Button, TextInput, Title } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db } from '../../../firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const PRODUCTS_STORAGE_KEY = '@mypos_products';
 
 const AddEditProduct = ({ route, navigation }) => {
 	const editProduct = route.params?.product;
@@ -31,40 +31,34 @@ const AddEditProduct = ({ route, navigation }) => {
 	const handleSave = async () => {
 		try {
 			setLoading(true);
-			let imageUrl = image;
-
-			// Upload image if it's a new image (not a URL)
-			if (image && !image.startsWith('http')) {
-				const storage = getStorage();
-				const imageRef = ref(storage, `products/${Date.now()}.jpg`);
-
-				const response = await fetch(image);
-				const blob = await response.blob();
-				await uploadBytes(imageRef, blob);
-				imageUrl = await getDownloadURL(imageRef);
-			}
-
+			
 			const productData = {
+				id: editProduct?.id || Date.now().toString(),
 				name,
 				price: parseFloat(price),
 				stock: parseInt(stock),
 				category,
-				imageUrl,
-				updatedAt: new Date(),
+				imageUrl: image,
+				updatedAt: new Date().toISOString(),
 			};
 
+			// Get existing products
+			const existingProductsJson = await AsyncStorage.getItem(PRODUCTS_STORAGE_KEY);
+			let products = existingProductsJson ? JSON.parse(existingProductsJson) : [];
+
 			if (editProduct) {
-				await updateDoc(
-					doc(db, 'products', editProduct.id),
-					productData
+				// Update existing product
+				products = products.map(p => 
+					p.id === editProduct.id ? productData : p
 				);
 			} else {
-				await addDoc(collection(db, 'products'), {
-					...productData,
-					createdAt: new Date(),
-				});
+				// Add new product
+				productData.createdAt = new Date().toISOString();
+				products.push(productData);
 			}
 
+			// Save updated products list
+			await AsyncStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(products));
 			navigation.goBack();
 		} catch (error) {
 			console.error('Error saving product:', error);

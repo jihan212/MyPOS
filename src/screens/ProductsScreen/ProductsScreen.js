@@ -8,80 +8,44 @@ import {
 	Paragraph,
 	Button,
 } from 'react-native-paper';
-import { collection, query, getDocs, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../../../firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { theme } from '../../constants/theme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+
+const PRODUCTS_STORAGE_KEY = '@mypos_products';
 
 const ProductsScreen = () => {
-	const [products, setProducts] = useState([
-		{
-			id: '1',
-			name: 'iPhone 14 Pro',
-			price: 999.99,
-			stock: 50,
-			category: 'Electronics',
-			imageUrl:
-				'https://images.unsplash.com/photo-1678685888221-cda773a3dcdb?w=800&auto=format&fit=crop',
-		},
-		{
-			id: '2',
-			name: 'MacBook Air M2',
-			price: 1299.99,
-			stock: 30,
-			category: 'Computers',
-			imageUrl:
-				'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop',
-		},
-		{
-			id: '3',
-			name: 'AirPods Pro',
-			price: 249.99,
-			stock: 100,
-			category: 'Accessories',
-			imageUrl:
-				'https://images.unsplash.com/photo-1588156979435-379b9d802921?w=800&auto=format&fit=crop',
-		},
-		{
-			id: '4',
-			name: 'iPad Pro 12.9"',
-			price: 1099.99,
-			stock: 25,
-			category: 'Tablets',
-			imageUrl:
-				'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=800&auto=format&fit=crop',
-		},
-	]);
+	const [products, setProducts] = useState([]);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [loading, setLoading] = useState(false);
 	const navigation = useNavigation();
-	// Remove or comment out the useEffect and fetchProducts function since we're using demo data
-	/*
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+	const isFocused = useIsFocused();
 
-  const fetchProducts = async () => {
-    try {
-      const q = query(collection(db, 'products'));
-      const querySnapshot = await getDocs(q);
-      const productsData = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setProducts(productsData);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  */
+	useEffect(() => {
+		if (isFocused) {
+			loadProducts();
+		}
+	}, [isFocused]);
+
+	const loadProducts = async () => {
+		try {
+			setLoading(true);
+			const storedProducts = await AsyncStorage.getItem(PRODUCTS_STORAGE_KEY);
+			if (storedProducts) {
+				setProducts(JSON.parse(storedProducts));
+			}
+		} catch (error) {
+			console.error('Error loading products:', error);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const handleDelete = async (productId) => {
 		try {
-			await deleteDoc(doc(db, 'products', productId));
-			setProducts(products.filter((product) => product.id !== productId));
+			const updatedProducts = products.filter((product) => product.id !== productId);
+			await AsyncStorage.setItem(PRODUCTS_STORAGE_KEY, JSON.stringify(updatedProducts));
+			setProducts(updatedProducts);
 		} catch (error) {
 			console.error('Error deleting product:', error);
 		}

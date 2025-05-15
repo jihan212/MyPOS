@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Button, TextInput, Title } from 'react-native-paper';
-import { collection, addDoc, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../../../firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const CUSTOMERS_STORAGE_KEY = '@mypos_customers';
 
 const AddEditCustomer = ({ route, navigation }) => {
 	const editCustomer = route.params?.customer;
@@ -13,29 +14,41 @@ const AddEditCustomer = ({ route, navigation }) => {
 	const [loading, setLoading] = useState(false);
 
 	const handleSave = async () => {
+		if (!name || !email || !phone) {
+			alert('Please fill in all required fields');
+			return;
+		}
+
 		try {
 			setLoading(true);
 			const customerData = {
+				id: editCustomer?.id || Date.now().toString(),
 				name,
 				email,
 				phone,
 				address,
-				updatedAt: new Date(),
+				totalPaidAmount: editCustomer?.totalPaidAmount || 0,
+				totalOrders: editCustomer?.totalOrders || 0,
+				updatedAt: new Date().toISOString(),
 			};
 
+			// Get existing customers
+			const existingCustomersJson = await AsyncStorage.getItem(CUSTOMERS_STORAGE_KEY);
+			let customers = existingCustomersJson ? JSON.parse(existingCustomersJson) : [];
+
 			if (editCustomer) {
-				await updateDoc(
-					doc(db, 'customers', editCustomer.id),
-					customerData
+				// Update existing customer
+				customers = customers.map(c => 
+					c.id === editCustomer.id ? customerData : c
 				);
 			} else {
-				await addDoc(collection(db, 'customers'), {
-					...customerData,
-					createdAt: new Date(),
-					totalOrders: 0,
-				});
+				// Add new customer
+				customerData.createdAt = new Date().toISOString();
+				customers.push(customerData);
 			}
 
+			// Save updated customers list
+			await AsyncStorage.setItem(CUSTOMERS_STORAGE_KEY, JSON.stringify(customers));
 			navigation.goBack();
 		} catch (error) {
 			console.error('Error saving customer:', error);
