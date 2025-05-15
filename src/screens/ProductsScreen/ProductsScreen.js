@@ -49,12 +49,12 @@ const ProductsScreen = ({ navigation }) => {
 		}
 	}, [isFocused]);
 
-	useEffect(() => {
+  useEffect(() => {
 		filterProducts();
 	}, [searchQuery, selectedCategory, products]);
 
 	const loadData = async () => {
-		try {
+    try {
 			setLoading(true);
 			const [productsData, categoriesData] = await Promise.all([
 				getData(STORAGE_KEYS.PRODUCTS),
@@ -62,18 +62,18 @@ const ProductsScreen = ({ navigation }) => {
 			]);
 
 			if (Array.isArray(productsData)) {
-				setProducts(productsData);
+      setProducts(productsData);
 			}
 
 			if (Array.isArray(categoriesData)) {
 				setCategories(categoriesData);
 			}
-		} catch (error) {
+    } catch (error) {
 			console.error('Error loading data:', error);
-		} finally {
-			setLoading(false);
-		}
-	};
+    } finally {
+      setLoading(false);
+    }
+  };
 
 	const filterProducts = () => {
 		let filtered = [...products];
@@ -119,37 +119,37 @@ const ProductsScreen = ({ navigation }) => {
 		console.log(`Found category info:`, categoryInfo);
 		
 		return (
-			<Card style={styles.card}>
-				{item.imageUrl && (
-					<Card.Cover
-						source={{ uri: item.imageUrl }}
-						style={styles.productImage}
-					/>
-				)}
-				<Card.Content>
-					<Title>{item.name}</Title>
+		<Card style={styles.card}>
+			{item.imageUrl && (
+				<Card.Cover
+					source={{ uri: item.imageUrl }}
+					style={styles.productImage}
+				/>
+			)}
+			<Card.Content>
+				<Title>{item.name}</Title>
 					<View style={styles.productDetails}>
-						<Paragraph>Price: ${item.price}</Paragraph>
-						<Paragraph>Stock: {item.stock}</Paragraph>
+				<Paragraph>Price: ${item.price}</Paragraph>
+				<Paragraph>Stock: {item.stock}</Paragraph>
 						<View style={styles.categoryContainer}>
 							<View style={[styles.categoryDot, { backgroundColor: categoryInfo.color }]} />
 							<Paragraph>{categoryInfo.name}</Paragraph>
 						</View>
 					</View>
-				</Card.Content>
-				<Card.Actions>
-					<Button
+			</Card.Content>
+			<Card.Actions>
+				<Button
 						onPress={() => {
 							console.log("Navigating to EditProduct with:", { ...item });
 							navigation.navigate('EditProduct', { product: item });
 						}}
-					>
-						Edit
-					</Button>
-					<Button onPress={() => handleDelete(item.id)}>Delete</Button>
-				</Card.Actions>
-			</Card>
-		);
+				>
+					Edit
+				</Button>
+				<Button onPress={() => handleDelete(item.id)}>Delete</Button>
+			</Card.Actions>
+		</Card>
+	);
 	};
 
 	if (loading) {
@@ -163,12 +163,12 @@ const ProductsScreen = ({ navigation }) => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.filterContainer}>
-				<Searchbar
-					placeholder='Search products'
-					onChangeText={setSearchQuery}
-					value={searchQuery}
-					style={styles.searchBar}
-				/>
+			<Searchbar
+				placeholder='Search products'
+				onChangeText={setSearchQuery}
+				value={searchQuery}
+				style={styles.searchBar}
+			/>
 				
 				<Menu
 					visible={categoryMenuVisible}

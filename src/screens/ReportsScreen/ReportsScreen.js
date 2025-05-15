@@ -69,7 +69,7 @@ const ReportsScreen = () => {
 
       return {
         labels: displayDates.map(date => new Date(date).toLocaleDateString('en-US', { weekday: 'short' })),
-        datasets: [{
+    datasets: [{
           data: dailySales.length > 0 ? dailySales : [0]
         }]
       };
@@ -115,7 +115,7 @@ const ReportsScreen = () => {
 
       return {
         labels: sortedProducts.map(([name]) => name),
-        datasets: [{
+    datasets: [{
           data: sortedProducts.map(([,quantity]) => quantity)
         }]
       };

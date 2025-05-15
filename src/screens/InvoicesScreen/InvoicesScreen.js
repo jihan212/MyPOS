@@ -130,8 +130,8 @@ const InvoicesScreen = () => {
         );
     };
 
-    return (
-        <View style={styles.container}>
+  return (
+    <View style={styles.container}>
             <ScrollView
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -161,7 +161,7 @@ const InvoicesScreen = () => {
                                     size={24}
                                     onPress={() => setSelectedInvoice(sale)}
                                 />
-                            </View>
+      </View>
                         </Card.Content>
                     </Card>
                 ))}
@@ -176,14 +176,14 @@ const InvoicesScreen = () => {
                     {selectedInvoice && <InvoiceDetails invoice={selectedInvoice} />}
                 </Modal>
             </Portal>
-        </View>
-    );
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: theme.colors.background,
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
     },
     invoiceCard: {
         margin: 8,
@@ -198,9 +198,9 @@ const styles = StyleSheet.create({
         marginVertical: 12,
     },
     cardFooter: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     },
     amount: {
         fontSize: 18,
@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     subtotalCell: {
-        flex: 1,
+    flex: 1,
         textAlign: 'right',
     },
     divider: {
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     },
     notesText: {
         color: theme.colors.textLight,
-    },
+  },
 });
 
 export default InvoicesScreen;

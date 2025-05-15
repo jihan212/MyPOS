@@ -125,7 +125,7 @@ const AddEditProduct = ({ route, navigation }) => {
 		
 		try {
 			setLoading(true);
-			
+
 			const productData = {
 				id: editProduct?.id || Date.now().toString(),
 				name,
@@ -150,7 +150,7 @@ const AddEditProduct = ({ route, navigation }) => {
 				productData.createdAt = new Date().toISOString();
 				await saveData(STORAGE_KEYS.PRODUCTS, [...products, productData]);
 			}
-			
+
 			navigation.goBack();
 		} catch (error) {
 			console.error('Error saving product:', error);
@@ -200,8 +200,8 @@ const AddEditProduct = ({ route, navigation }) => {
 					Back
 				</Button>
 				<Title style={styles.screenTitle}>
-					{editProduct ? 'Edit Product' : 'Add New Product'}
-				</Title>
+				{editProduct ? 'Edit Product' : 'Add New Product'}
+			</Title>
 			</View>
 
 			{image && (
